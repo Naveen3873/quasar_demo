@@ -36,12 +36,6 @@
                 type="submit"
                 rounded
               ></q-btn>
-              <div class="text-center q-mt-sm q-gutter-lg">
-                <router-link class="text-white" to="/login"
-                  >Esqueceu a senha?</router-link
-                >
-                <router-link class="text-white" to="/login">Criar conta</router-link>
-              </div>
             </div>
           </q-form>
         </q-card-section>
@@ -54,7 +48,7 @@
 // import { ref } from "vue";
 // import { required, email, minLength } from 'vuelidate/lib/validators'
 import axios from "axios";
-import btoa from "btoa";
+// import btoa from "vue";
 
 export default {
   name: "Login",
@@ -65,6 +59,23 @@ export default {
         password: "",
       },
     };
+  },
+  mounted() {
+    localStorage.removeItem("access");
+    // var Buffer = require('buffer/').Buffer
+    // console.log(Buffer);
+    // // console.log(Buffer.from('Hello World!').toString('base64'));
+    // return new Promise((resolve, reject) => {
+    //   this.$api.get('/telecaller/')
+    //   .then((response) => {
+    //     console.log(response.data);
+    //     resolve(response);
+    //   })
+    //   .catch((err) => {
+    //     console.log("homepage error");
+    //     reject(err);
+    //   })
+    // })
   },
   // validations: {
   //   email: { required, email },
@@ -88,11 +99,13 @@ export default {
         baseURL: "https://test.examsdaily.in:8443/edaily-auth",
       });
       return new Promise((resolve, reject) => {
+        var Buffer = require('buffer/').Buffer
         authAxios({
           method: "post",
-          url: "oauth/token",
+          url: "/oauth/token",
           headers: {
-            Authorization: "Basic " + btoa("barClientIdPassword:password"),
+            Authorization: "Basic " + Buffer.from('barClientIdPassword:password').toString('base64'),
+            // Authorization: "Basic " + $Buffer.from('barClientIdPassword:password').toString('base64'),
             Accept: "application/json",
             "Content-Type": "application/x-www-form-urlencoded",
           },
@@ -103,27 +116,42 @@ export default {
           },
         })
           .then((response) => {
-            $q.notify("login successfully");
-            // axios.defaults.headers.common["Authorization"] =
-            //   "Bearer " + response.data.access_token;
-            // // console.log(response.data);
-            // this.contact = this.user.username;
+            console.log("login()",response.data);
+            // $q.notify("login successfully");
+            axios.defaults.headers.common["Authorization"] =
+              "Bearer " + response.data.access_token;
+              // this.about();
+            localStorage.setItem("access", "approve");
+            this.$router.push('/home')
             // localStorage.setItem("accessToken", response.data.access_token);
             // localStorage.setItem("refreshToken", response.data.refresh_token);
             // localStorage.setItem("contact", this.user.username);
-            // localStorage.setItem("roles", "ROLE_TELECALLER");
+            // localStorage.setItem("roles", "USER");
             resolve(response);
           })
           .catch((err) => {
-            $q.notify({
-              color: "negative",
-              position: "top",
-              message: "Loading failed",
-              icon: "report_problem",
-            });
+            console.log("login failed");
+            // $q.notify({
+            //   color: "negative",
+            //   position: "top",
+            //   message: "Loading failed",
+            //   icon: "report_problem",
+            // });
             reject(err);
           });
       });
+    },
+    about() {
+      return new Promise((resolve, reject) => {
+        axios.get('/about')
+        .then((response) => {
+          console.log("about",response.data);
+          resolve(response);
+        })
+        .catch((err) => {
+          reject(err);
+        })
+      })
     },
   },
 };

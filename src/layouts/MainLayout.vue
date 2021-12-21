@@ -13,7 +13,8 @@
           false-value="no"
           @click="darkMode()"
         />
-        <div>{{ todaysDate }}</div>
+        <!-- <div>{{ todaysDate }}</div> -->
+        <q-btn color="red" text-color="white" label="logout" @click="this.$router.push('/')" />
       </q-toolbar>
     </q-header>
 

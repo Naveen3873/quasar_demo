@@ -12,9 +12,9 @@
 
 
 
-import {Notify,BottomSheet} from 'quasar'
+import {Notify,BottomSheet,SessionStorage,LocalStorage,Dialog} from 'quasar'
 
 
 
-export default { config: {},plugins: {Notify,BottomSheet} }
+export default { config: {},plugins: {Notify,BottomSheet,SessionStorage,LocalStorage,Dialog} }
 

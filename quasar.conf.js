@@ -7,11 +7,12 @@
 // https://quasar.dev/quasar-cli/quasar-conf-js
 
 const { default: axios } = require('axios');
+const btoa = require('btoa');
 const { configure } = require('quasar/wrappers');
 
 module.exports = configure(function (ctx) {
   return {
-    plugins: ['vuelidate',axios],
+    plugins: ['vuelidate','axios','btoa','Buffer'],
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
 
@@ -22,7 +23,7 @@ module.exports = configure(function (ctx) {
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
-      'axios',
+      'axios',btoa,Buffer
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -95,8 +96,8 @@ module.exports = configure(function (ctx) {
       // components: [],
       // directives: [],
 
-      // Quasar plugins
-      plugins: [ 'Notify', 'BottomSheet' ],
+      // Quasar plugins                                               /** this line **/
+      plugins: [ 'Notify', 'BottomSheet','Notify', 'SessionStorage', 'LocalStorage', 'Dialog', ],
     },
 
     // animations: 'all', // --- includes all animations
