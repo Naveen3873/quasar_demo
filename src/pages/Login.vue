@@ -4,9 +4,9 @@
     <!-- <div class="text-center text-primary">
       <h3>ExamsDaily</h3>
     </div> -->
-    <div class="col-0 col-md-6 flex justify-center content-center">
-      <img src="~assets/login.svg" class="responsive" alt="login-image" />
-    </div>
+    <!-- <div class="col-0 col-md-6 flex justify-center content-center">
+      <img src="~assets/bg1.jpg" class="responsive" alt="login-image" />
+    </div> -->
     <div
       v-bind:class="{ 'justify-center': $q.screen.md || $q.screen.sm || $q.screen.xs }"
       class="col-12 col-md-6 flex content-center"
@@ -25,7 +25,7 @@
           </div>
         </q-card-section>
         <q-card-section>
-          <q-form class="q-gutter-md" @submit.prevent="login">
+          <q-form class="q-gutter-md" @submit.prevent="signin">
             <q-input label="Username" v-model="user.username"> </q-input>
             <q-input label="Password" type="password" v-model="user.password"> </q-input>
             <div>
@@ -61,21 +61,12 @@ export default {
     };
   },
   mounted() {
-    localStorage.removeItem("access");
-    // var Buffer = require('buffer/').Buffer
-    // console.log(Buffer);
-    // // console.log(Buffer.from('Hello World!').toString('base64'));
-    // return new Promise((resolve, reject) => {
-    //   this.$api.get('/telecaller/')
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     resolve(response);
-    //   })
-    //   .catch((err) => {
-    //     console.log("homepage error");
-    //     reject(err);
-    //   })
-    // })
+    // localStorage.removeItem("access");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("contact");
+    localStorage.removeItem("roles");
+    localStorage.removeItem("current_user");
   },
   // validations: {
   //   email: { required, email },
@@ -94,17 +85,23 @@ export default {
   //   };
   // },
   methods: {
+    async signin() {
+      await this.login();
+      await this.getUserInfo(this.user.username);
+      await this.routeToHomePage();
+    },
     login() {
       var authAxios = axios.create({
         baseURL: "https://test.examsdaily.in:8443/edaily-auth",
       });
       return new Promise((resolve, reject) => {
-        var Buffer = require('buffer/').Buffer
+        var Buffer = require("buffer/").Buffer;
         authAxios({
           method: "post",
           url: "/oauth/token",
           headers: {
-            Authorization: "Basic " + Buffer.from('barClientIdPassword:password').toString('base64'),
+            Authorization:
+              "Basic " + Buffer.from("barClientIdPassword:password").toString("base64"),
             // Authorization: "Basic " + $Buffer.from('barClientIdPassword:password').toString('base64'),
             Accept: "application/json",
             "Content-Type": "application/x-www-form-urlencoded",
@@ -116,17 +113,13 @@ export default {
           },
         })
           .then((response) => {
-            console.log("login()",response.data);
-            // $q.notify("login successfully");
+            console.log("login()", response.data);
             axios.defaults.headers.common["Authorization"] =
               "Bearer " + response.data.access_token;
-              // this.about();
-            localStorage.setItem("access", "approve");
-            this.$router.push('/home')
-            // localStorage.setItem("accessToken", response.data.access_token);
-            // localStorage.setItem("refreshToken", response.data.refresh_token);
+            localStorage.setItem("accessToken", response.data.access_token);
+            localStorage.setItem("refreshToken", response.data.refresh_token);
             // localStorage.setItem("contact", this.user.username);
-            // localStorage.setItem("roles", "USER");
+            localStorage.setItem("roles", "USER");
             resolve(response);
           })
           .catch((err) => {
@@ -141,23 +134,57 @@ export default {
           });
       });
     },
+    getUserInfo: function (contact) {
+      var authAxios = axios.create({
+        baseURL: "https://test.examsdaily.in:8443/edaily-auth",
+      });
+      return new Promise((resolve, reject) => {
+        authAxios({
+          method: "get",
+          url: "manage/user/find/" + contact,
+        })
+          .then((response) => {
+            localStorage.setItem("current_user", JSON.stringify(response.data));
+            // console.log("getUserInfo",localStorage.getItem("current_user"));
+            resolve(response);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    routeToHomePage: function () {
+      return new Promise((resolve, reject) => {
+        this.$router.push("/home")
+          .then((response) => {
+            resolve(response);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
     about() {
       return new Promise((resolve, reject) => {
-        axios.get('/about')
-        .then((response) => {
-          console.log("about",response.data);
-          resolve(response);
-        })
-        .catch((err) => {
-          reject(err);
-        })
-      })
+        axios
+          .get("/about")
+          .then((response) => {
+            console.log("about", response.data);
+            resolve(response);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
     },
   },
 };
 </script>
 
 <style scoped>
+/* .body {
+  background-image: url("~assets/bg1.jpg");
+} */
 /* .login {
   margin: 0;
   padding: 0;
