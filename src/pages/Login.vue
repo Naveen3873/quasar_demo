@@ -49,6 +49,7 @@
 // import { required, email, minLength } from 'vuelidate/lib/validators'
 import axios from "axios";
 // import btoa from "vue";
+import { useQuasar } from "quasar";
 
 export default {
   name: "Login",
@@ -62,27 +63,18 @@ export default {
   },
   mounted() {
     // localStorage.removeItem("access");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("contact");
-    localStorage.removeItem("roles");
-    localStorage.removeItem("current_user");
+    // localStorage.removeItem("accessToken");
+    // localStorage.removeItem("refreshToken");
+    // localStorage.removeItem("contact");
+    // localStorage.removeItem("roles");
+    // localStorage.removeItem("current_user");
   },
   // validations: {
   //   email: { required, email },
   //   password: { required, minLength: minLength(4), }
   // },
   // setup() {
-  //   const inputRef = ref(null);
-
-  //   return {
-  //     model: ref(""),
-  //     inputRef,
-
-  //     reset() {
-  //       inputRef.value.resetValidation();
-  //     },
-  //   };
+  //   const $q = useQuasar();
   // },
   methods: {
     async signin() {
@@ -113,7 +105,8 @@ export default {
           },
         })
           .then((response) => {
-            console.log("login()", response.data);
+            // $q.notify("login successfully");
+            // console.log("login()", response.data);
             axios.defaults.headers.common["Authorization"] =
               "Bearer " + response.data.access_token;
             localStorage.setItem("accessToken", response.data.access_token);
@@ -155,7 +148,8 @@ export default {
     },
     routeToHomePage: function () {
       return new Promise((resolve, reject) => {
-        this.$router.push("/home")
+        this.$router
+          .push("/home")
           .then((response) => {
             resolve(response);
           })

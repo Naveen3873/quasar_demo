@@ -8,7 +8,7 @@
 
         <q-toggle
           v-model="dense"
-          color="secondary"
+          color="dark"
           true-value="yes"
           false-value="no"
           @click="darkMode()"
@@ -22,8 +22,9 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
+      <div class="date text-white">{{ todaysDate }}</div>
       <q-item-label header class="profileHeader">
-        <q-avatar>
+        <q-avatar size="60px">
           <img src="https://cdn.quasar.dev/img/avatar.png" />
         </q-avatar>
         <div class="text-white username">
@@ -102,7 +103,7 @@ export default defineComponent({
   computed: {
     todaysDate() {
       const timeStamp = Date.now();
-      return date.formatDate(timeStamp, "D/MM/YYYY hh:mm");
+      return date.formatDate(timeStamp, "D/MM/YYYY hh:mm a");
     },
   },
   mounted() {
@@ -184,6 +185,10 @@ export default defineComponent({
   margin-top: 5px;
 }
 .logout {
+  float: right;
+}
+.date{
+  margin-top: 5%;
   float: right;
 }
 </style>
