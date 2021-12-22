@@ -15,8 +15,18 @@
         />
         <!-- <div>{{ todaysDate }}</div> -->
         <!-- <q-btn color="red" text-color="white" label="logout" @click="this.$router.push('/')" /> -->
+        <div class="q-pa-md">
+          <q-btn
+            round
+            color="dark"
+            :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+            @click="$q.fullscreen.toggle()"
+          />
+        </div>
         <div class="notification">
-          <q-icon name="fas fa-bell" />
+          <q-btn round icon="notifications">
+            <q-badge floating color="red" rounded />
+          </q-btn>
         </div>
       </q-toolbar>
     </q-header>
@@ -26,6 +36,8 @@
       <q-item-label header class="profileHeader">
         <q-avatar size="60px">
           <img src="https://cdn.quasar.dev/img/avatar.png" />
+          <!-- <img :src="'/assets/' + account.avatar" /> -->
+          <!-- <img :src="imageSrc"> -->
         </q-avatar>
         <div class="text-white username">
           {{ username }}
@@ -54,7 +66,7 @@ import { date } from "quasar";
 const linksList = [
   {
     title: "Home Page",
-    caption: "homepage",
+    // caption: "homepage",
     icon: "home",
     link: "/#/home",
   },
@@ -66,27 +78,27 @@ const linksList = [
   // },
   {
     title: "Profile",
-    caption: "profile",
+    caption: "View your profile",
     icon: "fas fa-user",
     link: "/#/profile",
   },
   {
+    title: "Dashboard",
+    // caption: "@QuasarFramework",
+    icon: "public",
+    link: "/#/dashboard",
+  },
+  {
     title: "Youtube",
-    caption: "youtube videos",
+    caption: "ExamsDaily videos",
     icon: "fab fa-youtube",
     link: "https://www.youtube.com/c/Examsdaily",
   },
   {
     title: "Gmail",
-    caption: "gmail",
+    caption: "Mail to examsdaily",
     icon: "fas fa-envelope",
     link: "mailto:support@examsdaily.in",
-  },
-  {
-    title: "Facebook",
-    caption: "@QuasarFramework",
-    icon: "public",
-    link: "https://facebook.quasar.dev",
   },
   {
     title: "Quasar Awesome",
@@ -114,6 +126,7 @@ export default defineComponent({
       dense: "no",
       username: "",
       email: "",
+      imageSrc: "",
     };
   },
   components: {
@@ -130,18 +143,10 @@ export default defineComponent({
       }
     },
     getUserData() {
-      // return new Promise((resolve, reject) => {
       var currentUser = JSON.parse(localStorage.getItem("current_user"));
-      // .then((response) => {
       this.username = currentUser.username;
       this.email = currentUser.email[0];
-      // console.log(this.email);
-      //       resolve(response);
-      //     })
-      //     .catch((err) => {
-      //       reject(err);
-      //     });
-      // });
+      // this.imageSrc = currentUser.avatar;
     },
     logout() {
       return new Promise((resolve, reject) => {
@@ -187,7 +192,7 @@ export default defineComponent({
 .logout {
   float: right;
 }
-.date{
+.date {
   margin-top: 5%;
   float: right;
 }

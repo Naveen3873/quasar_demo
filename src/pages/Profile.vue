@@ -1,10 +1,10 @@
 <template>
-  <q-container>
+  <div>
     <q-avatar size="100px" class="avatar">
       <img src="https://cdn.quasar.dev/img/avatar.png" />
     </q-avatar>
-  </q-container>
-  <q-container>
+  </div>
+  <div>
     <div class="tabs">
       <q-card>
         <q-tabs
@@ -45,27 +45,54 @@
         </q-tab-panels>
       </q-card>
     </div>
-  </q-container>
+  </div>
 </template>
 
 <script>
+import { useQuasar, QSpinnerFacebook } from "quasar";
+import { onBeforeUnmount } from "vue";
+
 export default {
   name: "About",
   data() {
     return {
       tab: "profile",
-      firstName: '',
-      lastName:'',
-      username:'',
-      email:'',
-      mobile:'',
-      oldPassword:'',
-      newPassword:'',
-      confirmPassword:'',
+      firstName: "",
+      lastName: "",
+      username: "",
+      email: "",
+      mobile: "",
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
     };
   },
   mounted() {
+    this.showLoading();
     this.getUserData();
+  },
+  setup() {
+    const $q = useQuasar();
+    let timer;
+
+    onBeforeUnmount(() => {
+      if (timer !== void 0) {
+        clearTimeout(timer);
+        $q.loading.hide();
+      }
+    });
+
+    return {
+      showLoading() {
+        $q.loading.show();
+
+        // hiding in 2s
+        timer = setTimeout(() => {
+          $q.loading.hide();
+          timer = void 0;
+        }, 1000);
+      },
+    };
   },
   methods: {
     getUserData() {
@@ -77,7 +104,7 @@ export default {
       this.email = currentUser.email[0];
       this.mobile = currentUser.mobile[0];
     },
-  }
+  },
 };
 </script>
 
@@ -86,11 +113,11 @@ export default {
   margin-top: 10%;
   margin-left: 38%;
 }
-.tabs{
+.tabs {
   margin-top: 5%;
   /* left: 38%; */
 }
-.button{
+.button {
   margin-top: 5%;
   margin-left: 40%;
 }

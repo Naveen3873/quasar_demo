@@ -6,7 +6,7 @@
       style="width: 200px; height: 200px"
     > -->
     <!-- <h5 class="text-center text-primary">ExamsDaily</h5> -->
-    <q-container>
+    <div>
       <q-img
         src="https://cdn.filestackcontent.com/output=compress:true/tGVLsElPSxe2bF8G4rFp"
       >
@@ -14,8 +14,8 @@
           Success is the sum of small efforts repeated day in and day out
         </div>
       </q-img>
-    </q-container>
-    <q-container>
+    </div>
+    <div>
       <div class="row text-center card">
         <div class="col-4 col-md">
           <q-card class="my-card">
@@ -60,8 +60,8 @@
           </q-card>
         </div>
       </div>
-    </q-container>
-    <q-container>
+    </div>
+    <div>
       <q-card class="cardSelect" flat bordered>
         <q-card-section horizontal>
           <q-img class="col" src="~assets/card1.jpg" />
@@ -76,7 +76,7 @@
           {{ lorem }}
         </q-card-section>
       </q-card>
-            <q-card class="cardSelect" flat bordered>
+      <q-card class="cardSelect" flat bordered>
         <q-card-section horizontal>
           <q-img class="col" src="~assets/card4.jpg" />
 
@@ -90,7 +90,7 @@
           {{ lorem }}
         </q-card-section>
       </q-card>
-            <q-card class="cardSelect" flat bordered>
+      <q-card class="cardSelect" flat bordered>
         <q-card-section horizontal>
           <q-img class="col" src="~assets/card3.jpg" />
 
@@ -104,19 +104,43 @@
           {{ lorem }}
         </q-card-section>
       </q-card>
-    </q-container>
+    </div>
   </q-page>
 </template>
 
 <script>
 import { defineComponent } from "vue";
+import { useQuasar, QSpinnerFacebook } from "quasar";
+import { onBeforeUnmount } from "vue";
 
 export default defineComponent({
   name: "PageIndex",
+  mounted() {
+    this.showLoading();
+  },
   setup() {
+    const $q = useQuasar();
+    let timer;
+
+    onBeforeUnmount(() => {
+      if (timer !== void 0) {
+        clearTimeout(timer);
+        $q.loading.hide();
+      }
+    });
+
     return {
       lorem:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea.",
+      showLoading() {
+        $q.loading.show();
+
+        // hiding in 2s
+        timer = setTimeout(() => {
+          $q.loading.hide();
+          timer = void 0;
+        }, 1000);
+      },
     };
   },
 });
@@ -136,7 +160,7 @@ export default defineComponent({
   width: 96%;
   /* max-width: 200px; */
 }
-.q-pt-none{
+.q-pt-none {
   margin-top: 5px;
 }
 </style>

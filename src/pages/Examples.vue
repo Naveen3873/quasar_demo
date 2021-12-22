@@ -10,17 +10,13 @@
           color="primary"
           label="Show a notification"
         />
-        <q-btn
-          @click="showNotification"
-          color="dark"
-          label="Show another notification"
-        />
+        <q-btn @click="showNotification" color="dark" label="Show another notification" />
       </div>
       <div>
         {{ todaysDate }}
       </div>
       <q-btn :icon="$q.platform.is.ios ? 'thumb_up' : 'ion-ios-gear-outline'" />
-      <q-icon name="thumb_up"/>
+      <q-icon name="thumb_up" />
     </div>
     <!-- <q-page class="bg-light-green window-height window-width row justify-center items-center"> -->
     <!-- </q-page> -->
@@ -40,6 +36,25 @@ export default {
     this.matMenu = matMenu;
     this.mdiAbTesting = mdiAbTesting;
     this.fasFont = fasFont;
+  },
+  mounted() {
+    return new Promise((resolve, reject) => {
+      this.$router
+        .push("/examples")
+      // this.doSomething()
+        .then((response) => {
+          this.$q.notify({
+            color: "positive",
+            position: "top",
+            message: "Request sent! We'll contact you soon.",
+            icon: "done",
+          });
+          resolve(response);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   },
   setup() {
     const $q = useQuasar();
@@ -90,5 +105,4 @@ export default {
 // };
 </script>
 
-<style>
-</style>
+<style></style>

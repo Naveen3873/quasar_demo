@@ -49,7 +49,6 @@
 // import { required, email, minLength } from 'vuelidate/lib/validators'
 import axios from "axios";
 // import btoa from "vue";
-import { useQuasar } from "quasar";
 
 export default {
   name: "Login",
@@ -72,9 +71,6 @@ export default {
   // validations: {
   //   email: { required, email },
   //   password: { required, minLength: minLength(4), }
-  // },
-  // setup() {
-  //   const $q = useQuasar();
   // },
   methods: {
     async signin() {
@@ -105,8 +101,13 @@ export default {
           },
         })
           .then((response) => {
-            // $q.notify("login successfully");
-            // console.log("login()", response.data);
+            this.$q.notify({
+              color: 'positive',
+              position: 'top',
+              message: 'login successfully',
+              icon: 'done'
+            })
+            console.log("login()", response.data);
             axios.defaults.headers.common["Authorization"] =
               "Bearer " + response.data.access_token;
             localStorage.setItem("accessToken", response.data.access_token);
@@ -117,12 +118,12 @@ export default {
           })
           .catch((err) => {
             console.log("login failed");
-            // $q.notify({
-            //   color: "negative",
-            //   position: "top",
-            //   message: "Loading failed",
-            //   icon: "report_problem",
-            // });
+            this.$q.notify({
+              color: "negative",
+              position: "top",
+              message: "login failed",
+              icon: "report_problem",
+            });
             reject(err);
           });
       });
