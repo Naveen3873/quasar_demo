@@ -7,7 +7,7 @@ import axios from 'axios'
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-axios.defaults.baseURL = 'http://localhost:8088';
+axios.defaults.baseURL = 'http://localhost:8888';
 window.axios = axios;
 export default boot(({ app,router }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api

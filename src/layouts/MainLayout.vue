@@ -34,8 +34,27 @@
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <div class="date text-white">{{ todaysDate }}</div>
       <q-item-label header class="profileHeader">
+        <q-btn
+          class="profilePicture"
+          @click="confirm = true"
+          round
+          color="primary"
+          icon="camera"
+        />
+        <q-dialog v-model="confirm">
+          <q-card>
+            <q-card-section class="row">
+              <q-file v-model="file" ref="file" label="choose" append/>
+            </q-card-section>
+
+            <q-card-actions align="right">
+              <q-btn @click="setAvatar()" color="primary" label="upload" v-close-popup />
+              <q-btn flat label="cancel" color="primary" v-close-popup />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
         <q-avatar>
-          <img :src="avatar">
+          <img :src="avatar" />
         </q-avatar>
         <div class="text-white username">
           {{ username }}
@@ -46,6 +65,12 @@
           <!-- <q-tooltip class="text-red"> logout </q-tooltip> -->
           <!-- </q-icon> -->
         </div>
+        <!-- <q-file
+          class="file"
+          ref="file"
+          v-model="file"
+          @update:model-value="setAvatar()"
+        /> -->
       </q-item-label>
       <q-list>
         <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
@@ -127,12 +152,13 @@ export default defineComponent({
       dense: "no",
       username: "",
       email: "",
+      confirm: false,
       avatar: null,
-      file: "",
+      file: [],
     };
   },
   components: {
-    EssentialLink
+    EssentialLink,
   },
   methods: {
     darkMode() {
@@ -149,20 +175,37 @@ export default defineComponent({
       this.avatar = currentUser.avatar;
       this.username = currentUser.username;
       this.email = currentUser.email[0];
-      // if(currentUser.avatar != null){
-      //   this.avatar = currentUser.avatar;
-      // } else{
-      //   this.avatar = "~assets/user.png";
-      // }
-      console.log("this.avatar", this.avatar);
+      if (currentUser.avatar != null) {
+        this.avatar = currentUser.avatar;
+        localStorage.setItem("avatar", currentUser.avatar);
+        console.log(localStorage.getItem("avatar"));
+      } else {
+        this.avatar =
+          "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png";
+        localStorage.setItem("avatar", this.avatar);
+      }
+      // console.log("thiss.avatar", this.avatar);
     },
-    getAvatar() {
+    fileUpload() {
+      this.$refs.file.pickFiles();
+    },
+    setAvatar() {
+      // console.log("file", this.file);
+      var authAxios = axios.create();
+      var formData = new FormData();
+      formData.append("file", this.file);
+      // console.log("formData",formData);
       return new Promise((resolve, reject) => {
-        axios
-          .get("/image/get/2")
+        authAxios
+          .post("http://localhost:8888/image/upload", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
           .then((response) => {
-            console.log("getAvatar()", response.data);
-            this.avatar = response.data;
+            // console.log("imageUpload", response.data);
+            localStorage.setItem("avatar", response.data);
+            this.avatar = localStorage.getItem("avatar");
             resolve(response);
           })
           .catch((err) => {
@@ -170,20 +213,12 @@ export default defineComponent({
           });
       });
     },
-    setAvatar() {
-      console.log("file", this.file);
-      var authAxios = axios.create();
-      var formData = new FormData();
-      formData.append("file", this.file);
+    getAvatar() {
       return new Promise((resolve, reject) => {
-        authAxios
-          .post("http://localhost:8088/image/upload", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
+        axios
+          .get("/image/get/2")
           .then((response) => {
-            console.log("imageUpload", response.data);
+            // console.log("getAvatar()", response.data);
             this.avatar = response.data;
             resolve(response);
           })
@@ -228,10 +263,10 @@ export default defineComponent({
   z-index: -1;
 }
 .username {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 .email {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 .logout {
   float: right;
@@ -240,5 +275,15 @@ export default defineComponent({
   margin-top: 5%;
   float: right;
 }
+.profilePicture {
+  left: 50px;
+  z-index: 100;
+  font-size: 5px !important;
+}
+.file {
+  z-index: -100;
+  opacity: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
 </style>
->

@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-avatar size="100px" class="avatar">
-      <img src="https://cdn.quasar.dev/img/avatar.png" />
+      <img :src="avatar" />
     </q-avatar>
   </div>
   <div>
@@ -60,6 +60,7 @@ export default {
       firstName: "",
       lastName: "",
       username: "",
+      avatar:"",
       email: "",
       mobile: "",
       oldPassword: "",
@@ -103,6 +104,7 @@ export default {
       this.username = currentUser.username;
       this.email = currentUser.email[0];
       this.mobile = currentUser.mobile[0];
+      this.avatar = localStorage.getItem('avatar');
     },
   },
 };

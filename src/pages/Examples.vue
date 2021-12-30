@@ -21,12 +21,15 @@
     <!-- <q-page class="bg-light-green window-height window-width row justify-center items-center"> -->
     <!-- </q-page> -->
   </div>
+  <div>
+    <!-- <vue-letter-avatar name='Naveen' size='40' :rounded='true' /> -->
+  </div>
   <div class="q-pa-md">
-    <q-file v-model="file" label="Standard" />
+    <q-file v-model="file" ref="file" label="Standard" append/>
     <q-btn @click="onSubmit()" color="primary" label="Click"></q-btn>
   </div>
   <div>
-    <img :src="imageUrl" />
+    <img :src="imageUrl" height="100" width="120" />
   </div>
 </template>
 
@@ -37,6 +40,7 @@ import { date } from "quasar";
 import { matMenu } from "@quasar/extras/material-icons";
 import { mdiAbTesting } from "@quasar/extras/mdi-v6";
 import { fasFont } from "@quasar/extras/fontawesome-v5";
+// import VueLetterAvatar from 'vue-letter-avatar';
 // import axios from "axios";
 
 export default {
@@ -46,7 +50,9 @@ export default {
     this.mdiAbTesting = mdiAbTesting;
     this.fasFont = fasFont;
   },
-  components: {},
+  components: {
+    // VueLetterAvatar
+  },
   mounted() {
     // return new Promise((resolve, reject) => {
     //   this.$router
@@ -92,8 +98,7 @@ export default {
   data() {
     return {
       editor: "",
-      file: "",
-      file_selected: "",
+      file: [],
       imageUrl: "",
     };
   },
@@ -109,9 +114,10 @@ export default {
       var authAxios = axios.create();
       var formData = new FormData();
       formData.append("file", this.file);
+      console.log("formData",formData);
       return new Promise((resolve, reject) => {
         authAxios
-          .post("http://localhost:8088/image/upload", formData, {
+          .post("http://localhost:8888/image/upload", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -126,23 +132,23 @@ export default {
           });
       });
     },
-    singleUploadForm(file) {
-      console.log("file", file);
-      var authAxios = axios.create();
-      var formData = new FormData();
-      formData.append("file", file);
-      return new Promise((resolve, reject) => {
-        authAxios
-          .post("http://localhost:8088/image/upload", file)
-          .then((response) => {
-            console.log("singleUploadForm", response.data);
-            resolve(response);
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      });
-    },
+    // singleUploadForm(file) {
+    //   console.log("file", file);
+    //   var authAxios = axios.create();
+    //   var formData = new FormData();
+    //   formData.append("file", file);
+    //   return new Promise((resolve, reject) => {
+    //     authAxios
+    //       .post("http://localhost:8088/image/upload", file)
+    //       .then((response) => {
+    //         console.log("singleUploadForm", response.data);
+    //         resolve(response);
+    //       })
+    //       .catch((err) => {
+    //         reject(err);
+    //       });
+    //   });
+    // },
   },
 };
 
@@ -163,4 +169,8 @@ export default {
 // };
 </script>
 
-<style></style>
+<style>
+/* img {
+  border-radius: 50%;
+} */
+</style>

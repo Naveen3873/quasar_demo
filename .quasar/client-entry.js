@@ -148,7 +148,9 @@ createQuasarApp(createApp, quasarUserOptions)
   .then(app => {
     return Promise.all([
       
-      import(/* webpackMode: "eager" */ 'boot/axios')
+      import(/* webpackMode: "eager" */ 'boot/axios'),
+      
+      import(/* webpackMode: "eager" */ 'boot/VueLetterAvatar')
       
     ]).then(bootFiles => {
       const boot = bootFiles
