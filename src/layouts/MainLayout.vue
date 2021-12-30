@@ -122,10 +122,10 @@ const linksList = [
     link: "mailto:support@examsdaily.in",
   },
   {
-    title: "Quasar Awesome",
+    title: "Post",
     caption: "Community Quasar projects",
-    icon: "favorite",
-    link: "https://awesome.quasar.dev",
+    icon: "post",
+    link: "/#/post",
   },
 ];
 
