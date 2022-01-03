@@ -39,13 +39,49 @@
             </div>
           </q-form>
         </q-card-section>
+        <div class="pushRegister">
+          <p class="text-primary" @click="pushRegister = true">i dont have an account</p>
+        </div>
+        <div>
+          <q-dialog v-model="pushRegister">
+            <q-card>
+              <q-card-section class="row items-center q-pb-none">
+                <div class="text-h6">Register</div>
+                <q-space />
+                <q-btn icon="close" flat round dense v-close-popup />
+              </q-card-section>
+
+              <q-card-section class="register">
+                <q-form class="q-gutter-md">
+                  <q-input type="text" label="First Name" v-model="register.firstName">
+                  </q-input>
+                  <q-input type="text" label="Last Name" v-model="register.lastName">
+                  </q-input>
+                  <!-- <q-input label="Mobile" v-model="register.mobile"> </q-input> -->
+                  <q-input type="email" label="Email" v-model="register.email"> </q-input>
+                  <q-input type="password" label="Password" v-model="register.password">
+                  </q-input>
+                  <div>
+                    <q-btn
+                      class="full-width"
+                      color="primary"
+                      label="Register"
+                      rounded
+                      @click="userRegister()"
+                    ></q-btn>
+                  </div>
+                </q-form>
+              </q-card-section>
+            </q-card>
+          </q-dialog>
+        </div>
       </q-card>
     </div>
   </div>
 </template>
 
 <script>
-// import { ref } from "vue";
+import { ref } from "vue";
 // import { required, email, minLength } from 'vuelidate/lib/validators'
 import axios from "axios";
 // import btoa from "vue";
@@ -56,6 +92,15 @@ export default {
     return {
       user: {
         username: "",
+        password: "",
+      },
+      pushRegister: ref(false),
+      register: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        // mobile: "",
+        // username: "",
         password: "",
       },
     };
@@ -78,6 +123,34 @@ export default {
       await this.getUserInfo(this.user.username);
       await this.routeToHomePage();
     },
+    // login() {
+    //   return new Promise((resolve, reject) => {
+    //     axios
+    //       .post("/login",this.user)
+    //       .then((response) => {
+    //         console.log("login()", response.data);
+    //         this.getUserInfo(this.user.username);
+    //         resolve(response);
+    //       })
+    //       .catch((err) => {
+    //         reject(err);
+    //       });
+    //   });
+    // },
+    // getUserInfo(contact){
+    //   return new Promise((resolve, reject) => {
+    //     axios
+    //       .get("/user/get/"+contact)
+    //       .then((response) => {
+    //         console.log("login()", response.data);
+    //         localStorage.setItem("current_user", JSON.stringify(response.data));
+    //         resolve(response);
+    //       })
+    //       .catch((err) => {
+    //         reject(err);
+    //       });
+    //   });
+    // },
     login() {
       var authAxios = axios.create({
         baseURL: "https://test.examsdaily.in:8443/edaily-auth",
@@ -102,11 +175,11 @@ export default {
         })
           .then((response) => {
             this.$q.notify({
-              color: 'positive',
-              position: 'top',
-              message: 'login successfully',
-              icon: 'done'
-            })
+              color: "positive",
+              position: "top",
+              message: "login successfully",
+              icon: "done",
+            });
             console.log("login()", response.data);
             axios.defaults.headers.common["Authorization"] =
               "Bearer " + response.data.access_token;
@@ -139,7 +212,7 @@ export default {
         })
           .then((response) => {
             localStorage.setItem("current_user", JSON.stringify(response.data));
-            // console.log("getUserInfo",localStorage.getItem("current_user"));
+            console.log("getUserInfo", localStorage.getItem("current_user"));
             resolve(response);
           })
           .catch((err) => {
@@ -152,6 +225,21 @@ export default {
         this.$router
           .push("/home")
           .then((response) => {
+            resolve(response);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    userRegister() {
+      // console.log(this.register);
+      return new Promise((resolve, reject) => {
+        // axios.get("/user/view")
+        axios
+          .put("/user/register", this.register)
+          .then((response) => {
+            console.log("register()", response.data);
             resolve(response);
           })
           .catch((err) => {
@@ -202,5 +290,12 @@ export default {
   left: 0;
   bottom: 0;
   z-index: -1;
+}
+p {
+  float: right;
+  padding-right: 10px;
+}
+.register {
+  margin: 0 10px 2px 10px;
 }
 </style>

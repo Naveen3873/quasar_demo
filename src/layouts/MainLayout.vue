@@ -123,8 +123,8 @@ const linksList = [
   },
   {
     title: "Post",
-    caption: "Community Quasar projects",
-    icon: "post",
+    caption: "View post",
+    icon: "fas fa-vote-yea",
     link: "/#/post",
   },
 ];
@@ -190,11 +190,11 @@ export default defineComponent({
       this.$refs.file.pickFiles();
     },
     setAvatar() {
-      // console.log("file", this.file);
+      console.log("file", this.file);
       var authAxios = axios.create();
       var formData = new FormData();
       formData.append("file", this.file);
-      // console.log("formData",formData);
+      console.log("formData",formData);
       return new Promise((resolve, reject) => {
         authAxios
           .post("http://localhost:8888/image/upload", formData, {

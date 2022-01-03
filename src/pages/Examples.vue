@@ -29,7 +29,8 @@
     <q-btn @click="onSubmit()" color="primary" label="Click"></q-btn>
   </div>
   <div>
-    <img :src="imageUrl" height="100" width="120" />
+    <!-- <img :src="imageUrl" height="100" width="120" /> -->
+    <video controls="" autoplay="" name="media" loop=""><source :src="imageUrl" type="video/mp4"></video>
   </div>
 </template>
 
