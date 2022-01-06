@@ -150,7 +150,9 @@ createQuasarApp(createApp, quasarUserOptions)
       
       import(/* webpackMode: "eager" */ 'boot/axios'),
       
-      import(/* webpackMode: "eager" */ 'boot/VueLetterAvatar')
+      import(/* webpackMode: "eager" */ 'boot/VueLetterAvatar'),
+      
+      import(/* webpackMode: "eager" */ 'boot/GSignInButton')
       
     ]).then(bootFiles => {
       const boot = bootFiles

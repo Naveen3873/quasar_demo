@@ -1,6 +1,12 @@
 <template>
+  <div>
+
+  </div>
   <div class="logPage">
     <div class="text-center">
+      <!-- <progress-bar
+  :options="options"
+/> -->
       <div v-ripple>ExamsDaily</div>
       <q-icon name="alarm" />
       <q-icon name="cloud" />
@@ -25,12 +31,14 @@
     <!-- <vue-letter-avatar name='Naveen' size='40' :rounded='true' /> -->
   </div>
   <div class="q-pa-md">
-    <q-file v-model="file" ref="file" label="Standard" append/>
+    <q-file v-model="file" ref="file" label="Standard" append />
     <q-btn @click="onSubmit()" color="primary" label="Click"></q-btn>
   </div>
   <div>
     <!-- <img :src="imageUrl" height="100" width="120" /> -->
-    <video controls="" autoplay="" name="media" loop=""><source :src="imageUrl" type="video/mp4"></video>
+    <video controls="" autoplay="" name="media" loop="">
+      <source :src="imageUrl" type="video/mp4" />
+    </video>
   </div>
 </template>
 
@@ -41,17 +49,20 @@ import { date } from "quasar";
 import { matMenu } from "@quasar/extras/material-icons";
 import { mdiAbTesting } from "@quasar/extras/mdi-v6";
 import { fasFont } from "@quasar/extras/fontawesome-v5";
+// import ProgressBar from "vuejs-progress-bar";
+
 // import VueLetterAvatar from 'vue-letter-avatar';
 // import axios from "axios";
 
 export default {
-  name: 'Examples',
+  name: "Examples",
   created() {
     this.matMenu = matMenu;
     this.mdiAbTesting = mdiAbTesting;
     this.fasFont = fasFont;
   },
   components: {
+    // ProgressBar,
     // VueLetterAvatar
   },
   mounted() {
@@ -98,6 +109,33 @@ export default {
   },
   data() {
     return {
+      options: {
+        text: {
+          color: "#FFFFFF",
+          shadowEnable: true,
+          shadowColor: "#000000",
+          fontSize: 14,
+          fontFamily: "Helvetica",
+          dynamicPosition: false,
+          hideText: false,
+        },
+        progress: {
+          color: "#2dbd2d",
+          backgroundColor: "#333333",
+          inverted: false,
+        },
+        layout: {
+          height: 35,
+          width: 140,
+          verticalTextAlign: 61,
+          horizontalTextAlign: 43,
+          zeroOffset: 0,
+          strokeWidth: 30,
+          progressPadding: 0,
+          type: "line",
+        },
+      },
+
       editor: "",
       file: [],
       imageUrl: "",
@@ -115,7 +153,7 @@ export default {
       var authAxios = axios.create();
       var formData = new FormData();
       formData.append("file", this.file);
-      console.log("formData",formData);
+      console.log("formData", formData);
       return new Promise((resolve, reject) => {
         authAxios
           .post("http://localhost:8888/image/upload", formData, {

@@ -12,8 +12,17 @@ const routes = [
       { path: '/profile', component: () => import('src/pages/Profile.vue') },
       { path: '/dashboard', component: () => import('src/pages/Dashboard.vue') },
       { path: '/examples', component: () => import('pages/Examples.vue') },
-      { path: '/post', component: () => import('pages/Posts.vue') }
+      { path: '/post', component: () => import('pages/Posts.vue') },
     ],
+  },
+  {
+    path: '/responsive',
+    component: () => import('layouts/HomeLayout.vue'),
+    children:[
+      {
+        path: '/responsive',component: () => import('pages/Responsive.vue')
+      },
+    ]
   },
   // Always leave this as last one,
   // but you can also remove it

@@ -17,6 +17,7 @@
     "quasar": "^2.0.0",
     "vue-google-signin-button": "^1.0.4",
     "vue-letter-avatar": "^0.1.6",
+    "vuejs-progress-bar": "^1.2.7",
     "vuelidate": "^0.7.7"
   },
   "devDependencies": {

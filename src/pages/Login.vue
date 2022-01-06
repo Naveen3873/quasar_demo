@@ -18,6 +18,16 @@
           </q-avatar>
         </q-card-section>
         <q-card-section>
+          <g-signin-button
+            :params="googleSignInParams"
+            @success="onSignInSuccess"
+            @error="onSignInError"
+          >
+            Sign in with Google
+          </g-signin-button>
+          <!-- <div class="g-signin2" data-onsuccess="onSignIn">Google</div> -->
+        </q-card-section>
+        <q-card-section>
           <div class="q-pt-lg">
             <div class="col text-h6 ellipsis flex justify-center">
               <h2 class="text-h2 text-uppercase q-my-none text-weight-regular">Login</h2>
@@ -25,7 +35,7 @@
           </div>
         </q-card-section>
         <q-card-section>
-          <q-form class="q-gutter-md" @submit.prevent="signin">
+          <q-form class="q-gutter-md">
             <q-input label="Username" v-model="user.username"> </q-input>
             <q-input label="Password" type="password" v-model="user.password"> </q-input>
             <div>
@@ -33,7 +43,7 @@
                 class="full-width"
                 color="primary"
                 label="Login"
-                type="submit"
+                @click="signin()"
                 rounded
               ></q-btn>
             </div>
@@ -85,11 +95,17 @@ import { ref } from "vue";
 // import { required, email, minLength } from 'vuelidate/lib/validators'
 import axios from "axios";
 // import btoa from "vue";
+// import GSignInButton from '../boot/GSignInButton'
+// import GSignInButton from 'vue-google-signin-button'
 
 export default {
   name: "Login",
   data() {
     return {
+      googleSignInParams: {
+        client_id:
+          "171717666890-5qr9lc7kfeim2m8jr90suh2cn51d4o1m.apps.googleusercontent.com",
+      },
       user: {
         username: "",
         password: "",
@@ -117,7 +133,22 @@ export default {
   //   email: { required, email },
   //   password: { required, minLength: minLength(4), }
   // },
+  components: {
+    // GSignInButton
+  },
   methods: {
+    handleSignInClick(googleUser) {
+      var profile = googleUser.getBasicProfile();
+    },
+    onSignInSuccess(googleUser) {
+      // `googleUser` is the GoogleUser object that represents the just-signed-in user.
+      // See https://developers.google.com/identity/sign-in/web/reference#users
+      const profile = googleUser.getBasicProfile(); // etc etc
+    },
+    onSignInError(error) {
+      // `error` contains any error occurred.
+      console.log("OH NOES", error);
+    },
     async signin() {
       await this.login();
       await this.getUserInfo(this.user.username);

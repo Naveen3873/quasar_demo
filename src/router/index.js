@@ -1,8 +1,6 @@
 import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
-// import axios from 'src/boot/axios'
-
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation;
@@ -11,7 +9,8 @@ import routes from './routes'
  * async/await or return a Promise which resolves
  * with the Router instance.
  */
-export default route(function (/* { store, ssrContext } */) {
+// export default route(function (/* { store, ssrContext } */) {
+  export default route(function ( { Vue } ) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory)

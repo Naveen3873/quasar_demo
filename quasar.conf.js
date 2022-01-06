@@ -8,10 +8,11 @@
 
 const { default: axios } = require('axios');
 const { configure } = require('quasar/wrappers');
+const { default: GSignInButton } = require('vue-google-signin-button');
 
 module.exports = configure(function (ctx) {
   return {
-    plugins: ['vuelidate','axios','btoa','Buffer'],
+    plugins: ['vuelidate','axios','btoa','Buffer','GSignInButton'],
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
 
@@ -22,7 +23,9 @@ module.exports = configure(function (ctx) {
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
-      'axios','VueLetterAvatar'
+      'axios',
+      'VueLetterAvatar',
+      'GSignInButton'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
